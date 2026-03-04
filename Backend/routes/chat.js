@@ -23,7 +23,7 @@ router.post("/test", async (req, res) => {
 /* GET ALL THREADS */
 router.get("/thread", async (req, res) => {
   try {
-    const threads = await Thread.find().sort({ updatedAt: -1 });
+    const threads = await Thread.find({}).sort({ updatedAt: -1 });
     res.json(threads);
   } catch (err) {
     console.log(err);
