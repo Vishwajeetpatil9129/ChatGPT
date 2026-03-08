@@ -80,11 +80,11 @@ router.post("/chat", async (req, res) => {
         title: message,
         messages: [{role: "user" , content: message}]
       });
-    }
+    }else{
 
     // push user message
     thread.messages.push({ role: "user", content: message });
-
+    }
     // get AI response
     const assistantReply = await getOpenAIAPIResponse(message);
 

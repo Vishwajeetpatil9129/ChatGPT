@@ -2,6 +2,7 @@
     max-width: 700px;
     overflow-y: scroll;
     padding: 8rem;
+    scrollbar-color: #5a5a5a #1f1f1f;
 }
 
 .userDiv {
@@ -32,3 +33,4 @@
 pre {
     white-space: pre-wrap;
 }
+

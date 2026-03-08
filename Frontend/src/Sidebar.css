@@ -40,7 +40,9 @@ button:hover {
 .history {
     margin: 10px;
     padding: 10px;
-    height: 100%;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-color: #5a5a5a #1f1f1f;
 }
 
 .history li {
