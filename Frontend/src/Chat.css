@@ -1,7 +1,9 @@
 .chats {
+    width: 100%;
     max-width: 700px;
-    overflow-y: scroll;
-    padding: 8rem;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1rem 1rem 0;  
     scrollbar-color: #5a5a5a #1f1f1f;
 }
 
@@ -10,7 +12,6 @@
     justify-content: flex-end;
     font-size: 0.9rem;
 }
-
 
 .gptDiv {
     text-align: left;
@@ -21,7 +22,7 @@
     background-color: #323232;
     padding: 10px 20px;
     border-radius: 14px;
-    margin-left: 15rem;
+    margin-left: 5rem;  
     max-width: 500px;
     width: fit-content;
 }
@@ -33,4 +34,3 @@
 pre {
     white-space: pre-wrap;
 }
-
