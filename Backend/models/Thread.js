@@ -24,7 +24,7 @@ const ThreadSchema = new mongoose.Schema({
     },
     userId: {
         type: String,
-        required: true    // 👈 added
+        required: true   
     },
     title: {
         type: String,
