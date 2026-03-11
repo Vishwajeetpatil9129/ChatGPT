@@ -16,9 +16,24 @@ function ChatWindow() {
     prevChats,
     setPrevChats,
     setNewChat,
+    newChat,        // 👈 added
+    setAllThreads,  // 👈 added
   } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
+
+  // 👈 refetch all threads from backend
+  const refreshThreads = async () => {
+    if (!user) return;
+    try {
+      const response = await fetch(`http://localhost:8080/api/thread?userId=${user.id}`);
+      const res = await response.json();
+      const filteredData = res.map(thread => ({ threadId: thread.threadId, title: thread.title }));
+      setAllThreads(filteredData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const getReply = async () => {
     setLoading(true);
@@ -37,6 +52,7 @@ function ChatWindow() {
       const response = await fetch("http://localhost:8080/api/chat", options);
       const res = await response.json();
       setReply(res.reply);
+      if (newChat) await refreshThreads();  // 👈 refresh sidebar when first message is sent
     } catch (err) {
       console.log(err);
     }
@@ -60,15 +76,13 @@ function ChatWindow() {
         <span>
           ChatGPT <i className="fa-solid fa-chevron-down"></i>
         </span>
-
-        
         <div className="userIconDiv">
           <SignedOut>
             <SignInButton />
             <SignUpButton />
           </SignedOut>
           <SignedIn>
-            <UserButton />  
+            <UserButton />
           </SignedIn>
         </div>
       </div>
