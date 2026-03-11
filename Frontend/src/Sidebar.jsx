@@ -2,16 +2,16 @@ import "./Sidebar.css";
 import { useContext, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import { v1 as uuidv1 } from "uuid";
-import { useUser } from "@clerk/clerk-react";  // 👈 import
+import { useUser } from "@clerk/clerk-react"; 
 
 function Sidebar() {
     const { allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats } = useContext(MyContext);
-    const { user } = useUser();  // 👈 get current user
+    const { user } = useUser();  
 
     const getAllThreads = async () => {
-        if (!user) return;  // 👈 wait until user is loaded
+        if (!user) return;  
         try {
-            const response = await fetch(`http://localhost:8080/api/thread?userId=${user.id}`);  // 👈 send userId
+            const response = await fetch(`http://localhost:8080/api/thread?userId=${user.id}`);  
             const res = await response.json();
             const filteredData = res.map(thread => ({ threadId: thread.threadId, title: thread.title }));
             setAllThreads(filteredData);
@@ -22,7 +22,7 @@ function Sidebar() {
 
     useEffect(() => {
         getAllThreads();
-    }, [currThreadId, user]);  // 👈 also re-run when user loads
+    }, [currThreadId, user]);  
 
     const createNewChat = () => {
         setNewChat(true);

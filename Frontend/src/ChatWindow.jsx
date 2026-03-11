@@ -16,13 +16,12 @@ function ChatWindow() {
     prevChats,
     setPrevChats,
     setNewChat,
-    newChat,        // 👈 added
-    setAllThreads,  // 👈 added
+    newChat,        
+    setAllThreads,  
   } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
 
-  // 👈 refetch all threads from backend
   const refreshThreads = async () => {
     if (!user) return;
     try {
@@ -52,7 +51,7 @@ function ChatWindow() {
       const response = await fetch("http://localhost:8080/api/chat", options);
       const res = await response.json();
       setReply(res.reply);
-      if (newChat) await refreshThreads();  // 👈 refresh sidebar when first message is sent
+      if (newChat) await refreshThreads();  
     } catch (err) {
       console.log(err);
     }
@@ -105,7 +104,7 @@ function ChatWindow() {
         </div>
       </div>
       <div className="info">
-        <p>ChatGPT can make mistakes. Check important info. See Cookie Preferences.</p>
+        <p>ChatGPT can make mistakes. Check important info. See Cookie Preferences. </p>
       </div>
     </div>
   );
