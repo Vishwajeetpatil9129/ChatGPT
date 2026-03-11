@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const MessageSchema = new mongoose.Schema({
     role: {
         type: String,
-        enum: ["user" , "assistant"],
+        enum: ["user", "assistant"],
         required: true
     },
     content: {
@@ -14,7 +14,6 @@ const MessageSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-
 });
 
 const ThreadSchema = new mongoose.Schema({
@@ -23,6 +22,10 @@ const ThreadSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    userId: {
+        type: String,
+        required: true    // 👈 added
+    },
     title: {
         type: String,
         default: "New Chat"
@@ -30,4 +33,4 @@ const ThreadSchema = new mongoose.Schema({
     messages: [MessageSchema]
 }, { timestamps: true });
 
-export default mongoose.model("Thread" , ThreadSchema);
+export default mongoose.model("Thread", ThreadSchema);
