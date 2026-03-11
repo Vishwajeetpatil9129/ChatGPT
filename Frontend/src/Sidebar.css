@@ -8,8 +8,7 @@
     justify-content: space-between;
 }
 
-
-button {
+.sidebar > button {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,6 +18,7 @@ button {
     background-color: transparent;
     border: solid 0.5px rgba(255, 255, 255, 0.5);
     cursor: pointer;
+    width: calc(100% - 20px);
 }
 
 .logo {
@@ -29,11 +29,11 @@ button {
     object-fit: cover;
 }
 
-button span {
+.sidebar > button span {
     font-size: 20px;
 }
 
-button:hover {
+.sidebar > button:hover {
     background-color: rgba(180, 180, 180, 0.05);
 }
 

@@ -4,26 +4,26 @@ import ChatWindow from "./ChatWindow.jsx";
 import { MyContext } from "./MyContext.jsx";
 import { useState } from "react";
 import { v1 as uuidv1 } from "uuid";
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut } from '@clerk/clerk-react';  
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SignInPage from "./pages/sign-in.jsx";
 import SignUpPage from "./pages/sign-up.jsx";
 
 function App() {
-  const [prompt , setPrompt] = useState("");
-  const [reply , setReply] = useState(null);
-  const [currThreadId , setCurrThreadId] = useState(uuidv1());
-  const [prevChats , setPrevChats] = useState([]);
-  const [newChat , setNewChat] = useState(true);
-  const [allThreads , setAllThreads] = useState([]);
+  const [prompt, setPrompt] = useState("");
+  const [reply, setReply] = useState(null);
+  const [currThreadId, setCurrThreadId] = useState(uuidv1());
+  const [prevChats, setPrevChats] = useState([]);
+  const [newChat, setNewChat] = useState(true);
+  const [allThreads, setAllThreads] = useState([]);
 
   const providerValue = {
-    prompt , setPrompt,
-    reply , setReply,
-    currThreadId , setCurrThreadId,
-    prevChats , setPrevChats,
-    newChat , setNewChat,
-    allThreads , setAllThreads
+    prompt, setPrompt,
+    reply, setReply,
+    currThreadId, setCurrThreadId,
+    prevChats, setPrevChats,
+    newChat, setNewChat,
+    allThreads, setAllThreads
   };
 
   return (
@@ -42,10 +42,7 @@ function App() {
             </SignedOut>
 
             <SignedIn>
-              <div className="main">
-                <header>
-                  <UserButton />
-                </header>
+              <div className="main"> 
                 <MyContext.Provider value={providerValue}>
                   <Sidebar />
                   <ChatWindow />

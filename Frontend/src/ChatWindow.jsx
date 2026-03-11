@@ -4,7 +4,7 @@ import { MyContext } from "./MyContext.jsx";
 import { useContext } from "react";
 import { ScaleLoader } from "react-spinners";
 import React, { useState, useEffect } from "react";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react"; // 👈 added useUser
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react";
 
 function ChatWindow() {
   const {
@@ -18,29 +18,24 @@ function ChatWindow() {
     setNewChat,
   } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();  // 👈 get current user
+  const { user } = useUser();
 
   const getReply = async () => {
     setLoading(true);
     setNewChat(false);
-    console.log("message", prompt, "threadId", currThreadId);
     const options = {
       method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: prompt,
         threadId: currThreadId,
-        userId: user?.id,  // 👈 send userId with every message
+        userId: user?.id,
       }),
     };
 
     try {
       const response = await fetch("http://localhost:8080/api/chat", options);
       const res = await response.json();
-      console.log(res);
       setReply(res.reply);
     } catch (err) {
       console.log(err);
@@ -59,50 +54,28 @@ function ChatWindow() {
     setPrompt("");
   }, [reply]);
 
-  const handleProfileClick = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
     <div className="chatWindow">
       <div className="navbar">
         <span>
           ChatGPT <i className="fa-solid fa-chevron-down"></i>
         </span>
-        <div className="userIconDiv" onClick={handleProfileClick}>
-          <span className="userIcon">
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </span>
+
+        
+        <div className="userIconDiv">
+          <SignedOut>
+            <SignInButton />
+            <SignUpButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />  
+          </SignedIn>
         </div>
       </div>
 
-      {isOpen && (
-        <div className="dropDown">
-          <div className="dropDownItem">
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-          </div>
-          <div className="dropDownItem">
-            <i className="fa-solid fa-cloud-arrow-up"></i> Upgrade plan
-          </div>
-          <div className="dropDownItem">
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </div>
-        </div>
-      )}
+      <Chat />
 
-      <Chat></Chat>
-
-      <ScaleLoader color="#fff" loading={loading}></ScaleLoader>
+      <ScaleLoader color="#fff" loading={loading} />
 
       <div className="chatInput">
         <div className="inputBox">
