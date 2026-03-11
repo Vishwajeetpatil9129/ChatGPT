@@ -18,6 +18,14 @@
     align-items: center;
 }
 
+.authBtn{
+  background: transparent;
+  border: none;
+  color: white;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
 .navbar span {
     margin: 1rem 2rem;
 }

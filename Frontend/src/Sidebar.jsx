@@ -2,25 +2,27 @@ import "./Sidebar.css";
 import { useContext, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import { v1 as uuidv1 } from "uuid";
+import { useUser } from "@clerk/clerk-react";  // 👈 import
 
 function Sidebar() {
-    const { allThreads , setAllThreads , currThreadId , setNewChat , setPrompt , setReply , setCurrThreadId , setPrevChats} = useContext(MyContext);
+    const { allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats } = useContext(MyContext);
+    const { user } = useUser();  // 👈 get current user
 
     const getAllThreads = async () => {
-        try{
-            const response = await fetch("http://localhost:8080/api/thread");
+        if (!user) return;  // 👈 wait until user is loaded
+        try {
+            const response = await fetch(`http://localhost:8080/api/thread?userId=${user.id}`);  // 👈 send userId
             const res = await response.json();
-            const filteredData = res.map(thread => ({threadId: thread.threadId, title: thread.title}));
-            // console.log(filteredData);
+            const filteredData = res.map(thread => ({ threadId: thread.threadId, title: thread.title }));
             setAllThreads(filteredData);
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     };
 
     useEffect(() => {
         getAllThreads();
-    } , [currThreadId]);
+    }, [currThreadId, user]);  // 👈 also re-run when user loads
 
     const createNewChat = () => {
         setNewChat(true);
@@ -30,34 +32,26 @@ function Sidebar() {
         setPrevChats([]);
     }
 
-    const changeThread = async(newThreadId) => {
+    const changeThread = async (newThreadId) => {
         setCurrThreadId(newThreadId);
-
-        try{
+        try {
             const response = await fetch(`http://localhost:8080/api/thread/${newThreadId}`);
             const res = await response.json();
-            console.log(res);
             setPrevChats(res);
             setNewChat(false);
             setReply(null);
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     }
 
     const deleteThread = async (threadId) => {
-        try{
-            const response = await fetch(`http://localhost:8080/api/thread/${threadId}` , {method: "DELETE"});
+        try {
+            const response = await fetch(`http://localhost:8080/api/thread/${threadId}`, { method: "DELETE" });
             const res = await response.json();
-            console.log(res);
-
             setAllThreads(prev => prev.filter(thread => thread.threadId !== threadId));
-
-            if(threadId === currThreadId){
-                createNewChat();
-            }
-
-        }catch(err){
+            if (threadId === currThreadId) createNewChat();
+        } catch (err) {
             console.log(err);
         }
     }
@@ -70,21 +64,19 @@ function Sidebar() {
             </button>
 
             <ul className="history">
-                {
-                    allThreads?.map((thread , idx) => (
-                        <li key={idx}
-                            onClick={(e) => changeThread(thread.threadId)}
-                            className={thread.threadId === currThreadId ? "highlighted" : " "}
-                        >{thread.title}
+                {allThreads?.map((thread, idx) => (
+                    <li key={idx}
+                        onClick={() => changeThread(thread.threadId)}
+                        className={thread.threadId === currThreadId ? "highlighted" : " "}
+                    >{thread.title}
                         <i className="fa-solid fa-trash"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 deleteThread(thread.threadId);
-                            }}    
+                            }}
                         ></i>
-                        </li>
-                    ))
-                }
+                    </li>
+                ))}
             </ul>
 
             <div className="sign">

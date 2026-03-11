@@ -4,6 +4,7 @@ import { MyContext } from "./MyContext.jsx";
 import { useContext } from "react";
 import { ScaleLoader } from "react-spinners";
 import React, { useState, useEffect } from "react";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react"; // 👈 added useUser
 
 function ChatWindow() {
   const {
@@ -18,6 +19,7 @@ function ChatWindow() {
   } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useUser();  // 👈 get current user
 
   const getReply = async () => {
     setLoading(true);
@@ -31,6 +33,7 @@ function ChatWindow() {
       body: JSON.stringify({
         message: prompt,
         threadId: currThreadId,
+        userId: user?.id,  // 👈 send userId with every message
       }),
     };
 
@@ -45,38 +48,36 @@ function ChatWindow() {
     setLoading(false);
   };
 
-  // Append new chats to prevchats
   useEffect(() => {
     if (prompt && reply) {
       setPrevChats((prevChats) => [
         ...prevChats,
-        {
-          role: "user",
-          content: prompt,
-        },
-        {
-          role: "assistant",
-          content: reply,
-        },
+        { role: "user", content: prompt },
+        { role: "assistant", content: reply },
       ]);
     }
-
     setPrompt("");
   }, [reply]);
 
   const handleProfileClick = () => {
-        setIsOpen(!isOpen);
-    }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div className="chatWindow">
       <div className="navbar">
         <span>
-          SigmaGPT <i className="fa-solid fa-chevron-down"></i>
+          ChatGPT <i className="fa-solid fa-chevron-down"></i>
         </span>
         <div className="userIconDiv" onClick={handleProfileClick}>
           <span className="userIcon">
-            <i className="fa-solid fa-user"></i>
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </span>
         </div>
       </div>
@@ -84,13 +85,17 @@ function ChatWindow() {
       {isOpen && (
         <div className="dropDown">
           <div className="dropDownItem">
-            <i class="fa-solid fa-gear"></i> Settings
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
           </div>
           <div className="dropDownItem">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Upgrade plan
+            <i className="fa-solid fa-cloud-arrow-up"></i> Upgrade plan
           </div>
           <div className="dropDownItem">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
         </div>
       )}
@@ -107,17 +112,13 @@ function ChatWindow() {
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={(e) => (e.key === "Enter" ? getReply() : "")}
           />
-
           <div id="submit" onClick={getReply}>
             <i className="fa-solid fa-paper-plane"></i>
           </div>
         </div>
       </div>
       <div className="info">
-        <p>
-          SigmaGPT can make mistakes. Check important info. See Cookie
-          Preferences.
-        </p>
+        <p>ChatGPT can make mistakes. Check important info. See Cookie Preferences.</p>
       </div>
     </div>
   );
