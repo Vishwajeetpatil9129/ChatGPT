@@ -104,7 +104,7 @@ function ChatWindow() {
         </div>
       </div>
       <div className="info">
-        <p>ChatGPT can make mistakes. Check important info. See Cookie Preferences. </p>
+        <p>ChatGPT can make mistakes. Check important info. See Cookie Preferences.</p>
       </div>
     </div>
   );
