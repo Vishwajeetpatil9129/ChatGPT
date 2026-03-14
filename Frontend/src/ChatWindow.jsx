@@ -25,7 +25,7 @@ function ChatWindow() {
   const refreshThreads = async () => {
     if (!user) return;
     try {
-      const response = await fetch(`http://localhost:8080/api/thread?userId=${user.id}`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/thread?userId=${user.id}`);
       const res = await response.json();
       const filteredData = res.map(thread => ({ threadId: thread.threadId, title: thread.title }));
       setAllThreads(filteredData);
@@ -48,7 +48,7 @@ function ChatWindow() {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/chat", options);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, options);
       const res = await response.json();
       setReply(res.reply);
       if (newChat) await refreshThreads();  
