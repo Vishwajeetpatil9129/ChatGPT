@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import { v1 as uuidv1 } from "uuid";
 import { useUser } from "@clerk/clerk-react"; 
-import logo from "../assets/blacklogo.png"
+import logo from "./assets/blacklogo.png"
 
 function Sidebar() {
     const { allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats } = useContext(MyContext);
